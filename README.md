@@ -1,102 +1,79 @@
------
+---
 
-# 🚀 Résumé de Projets Techniques
+# 🖼️ Projet Tutoré: Afficheur Ubiquitaire Multi-Écran
 
-Ce dépôt rassemble les réalisations de deux projets majeurs :
+## 🌟 Vue d'Ensemble du Projet
 
-1.  Un projet **Cloud Native & DevOps** sur Google Kubernetes Engine (GKE) impliquant le déploiement de microservices, la gestion des clusters et la mise en place de la surveillance.
-2.  Un **Projet Tutoré** académique sur la conception et la réalisation d'un **Afficheur Ubiquitaire** (Mur d'images) basé sur la technologie SAGE2.
+Ce projet tutoré, réalisé dans le cadre de la Licence Professionnelle **LP MERIT** à l'UPECiut (Université Paris-Est Créteil), avait pour objectif la conception et la réalisation d'une architecture de **visualisation nomade et multi-écran**, souvent désignée comme un **Afficheur Ubiquitaire** (ou Mur d'images). Il s'agissait d'un projet **DIY (Do It Yourself)** visant à présenter une maquette fonctionnelle.
 
------
+* **Année :** 2019-2020
+* **Auteurs :** Matthieu COURBE, Hassan OULCAID, Guillaume SEUROT, Tarek AISSAOUI
+* **Tuteur :** M.SOUHI Sami
 
-## ☁️ Projet Cloud Native & DevOps (GKE/Microservices)
+---
 
-Ce projet a consisté à déployer et gérer une application de microservices (Online Boutique) sur Google Kubernetes Engine (GKE) en respectant des directives strictes de configuration, de migration et de mise à jour.
+## 💡 Choix de la Solution Technique : SAGE2
 
-### ⚙️ Environnement Technique
+Après une étude comparative (état de l'art) de différentes architectures possibles, le groupe a retenu la solution **SAGE2**.
 
-| Catégorie | Détail |
+| Solution Étudiée | Description |
 | :--- | :--- |
-| **Application** | Microservices Demo (Online Boutique) |
-| **Plateforme** | Google Kubernetes Engine (GKE) |
-| **Nom du Cluster** | `onlineboutique-cluster-422` |
-| **Zone de Déploiement** | `us-east1-c` |
-| **Taille des Nœuds** | `e2-standard-2` (2 vCPU, 8 Go) |
-| **Canal de Publication** | `rapid` |
-| **Surveillance** | Cloud Logging & Monitoring Agents |
+| **PiWall** | Mur d'images reposant sur un modèle client/serveur avec des Raspberry Pi (RPi) clients pour le cast de flux vidéo. |
+| **TIDE** | Tiled Interactive Display Environment (Environnement d'affichage interactif en mosaïque de BlueBrain) offrant une interaction tactile multi-fenêtres et multi-utilisateurs. |
+| **SAGE2** | **S**calable **A**mplified **G**roup **E**nvironment. Plate-forme Web permettant aux équipes d'afficher, de gérer, de partager et d'étudier des ensembles de données à grande échelle sur des murs d'affichage carrelés. |
 
-### 🛠️ Tâches Clés Réalisées
+**SAGE2** a été choisi pour sa flexibilité, étant une refonte complète de SAGE basée sur des technologies web et cloud.
 
-#### **1. Déploiement Initial**
+---
 
-  * Création d'un cluster zonal de **2 nœuds**.
-  * Mise en place des namespaces `dev` et `prod` pour séparer les environnements.
-  * Déploiement initial de l'application dans le namespace `dev`.
+## 🛠️ Matériel et Architecture Physique
 
-<!-- end list -->
+La maquette physique a été conçue sur une architecture de $3 \times 3$ écrans et un modèle Client/Serveur.
 
-```bash
-git clone https://github.com/GoogleCloudPlatform/microservices-demo.git
-cd microservices-demo
-kubectl apply -f ./release/kubernetes-manifests.yaml --namespace dev
-```
+### Composition Matérielle
 
-#### **2. Migration des Pools de Nœuds**
-
-Une migration des déploiements vers un nouveau pool de nœuds a été effectuée pour respecter une nouvelle spécification de machine :
-
-  * Création d'un nouveau pool de **2 nœuds** avec une machine de type `custom-2-3584`.
-  * Migration sécurisée des déploiements par **cordonnement (`cordoning off`) et drainage (`draining`)** du `default-pool`.
-  * Suppression du `default-pool` une fois la migration terminée.
-
-#### **3. Mise en Place de la Surveillance**
-
-L'installation des agents sur la VM `apache-vm` a été effectuée pour assurer la collecte de métriques et de logs.
-
-  * Installation des agents Cloud Logging et Cloud Monitoring.
-  * Activation du plugin pour la surveillance du serveur Web Apache.
-
-#### **4. Mise à Jour du Frontend (Haute Disponibilité)**
-
-Une mise à jour de l'image du service `frontend` a été appliquée tout en garantissant la continuité du service :
-
-  * Création d'un **Pod Disruption Budget (PDB)** nommé `onlineboutique-frontend-pdb`.
-  * Configuration de la `min-availability` (disponibilité minimale) à **1**.
-  * Mise à jour de l'image Docker du déploiement `frontend` vers la version `gcr.io/qwiklabs-resources/onlineboutique-frontend:v2.1`.
-  * Définition de la politique de tirage d'image (`ImagePullPolicy`) à `Always`.
-
------
-
-## 🖼️ Projet Tutoré: Afficheur Ubiquitaire Multi-Écran
-
-Ce projet tutoré (Année 2019-2020) portait sur la conception et la réalisation d'une architecture de visualisation nomade et multi-écran, connue sous le nom d'**Afficheur Ubiquitaire** ou mur d'images.
-
-### 💡 Solution et Technologies
-
-| Catégorie | Détail | Source |
+| Composant | Quantité | Rôle / Caractéristiques |
 | :--- | :--- | :--- |
-| **Objectif** | Réaliser un afficheur nomade ubiquitaire (DIY Project) | |
-| **Solution Retenue** | **SAGE2** (Scalable Amplified Group Environment) | |
-| **Alternatives Étudiées** | PiWall, TIDE | |
-| **Description SAGE2** | Plate-forme Web permettant d'afficher, de gérer et de juxtaposer des ensembles de données et des supports numériques sur des murs d'affichage carrelés | |
-| **Logiciels Pré-requis** | **Node.js** (pour lancer les scripts) et Google Chrome 64bit | |
+| **Écrans** | 9 | Écrans **LCD DELL 17 pouces** (1440 x 900 à 60 Hz, connectique VGA). |
+| **Clients** | 9 RPi | Un **Raspberry Pi** par écran. |
+| **Serveur** | 1 NUC | Serveur SAGE2 de diffusion de contenu (sous **Windows 10**). |
+| **Réseau** | 1 RPi | Un RPi supplémentaire servant de **relais DHCP**. |
+| **Connectivité** | 1 Switch 24 ports Gb, 1 AP wireless AC Gb. | Le rôle de l'AP est de permettre un accès sans fil au serveur. |
+| **Support** | Bois et Métal | Plaque en bois (1,40 m²) et support métallique (1,40m / 2m). |
 
-### 📐 Architecture Physique (Maquette)
+### Réseau et Flux
 
-L'architecture est basée sur un modèle client/serveur avec un mur d'images de $3 \times 3$ écrans.
+* **Réseau Utilisé :** `192.168.1.0/24`.
+* **Flux Vidéo :** Le serveur NUC envoie **30 Mb/s** à chaque Raspberry Pi.
+* **Identification Client :** Chaque RPi est identifié par son adresse MAC, son adresse IP et sa position dans l'architecture.
 
-| Composant | Quantité | Rôle / Caractéristiques | Source |
-| :--- | :--- | :--- | :--- |
-| **Écrans** | 9 | LCD DELL 17 pouces, résolution 1440 x 900 | |
-| **Clients d'Affichage** | 9 RPi | Un Raspberry Pi par écran | |
-| **Serveur SAGE2** | 1 NUC | Serveur de diffusion de contenu (sous Windows 10) | |
-| **Relais Réseau** | 1 RPi | Utilisé comme relais DHCP pour distribuer les adresses IP | |
-| **Réseau** | 1 Switch 24 ports Gb, 1 AP wireless AC Gb | Réseau 192.168.1.0/24. Débit de **30 Mb/s** envoyé à chaque RPi | |
-| **Support** | Planche en bois (1,40 m²), Support métallique (1,40m / 2m) | Conception et assemblage de la structure physique (conception SolidWorks) | |
+---
 
-### 💻 Configuration SAGE2
+## 💻 Installation et Configuration Logicielle
 
-  * **Exécution :** L'exécution de SAGE2 est contrôlée par le processus **Launcher** (fichier `Launcher.bat`).
-  * **Accès :** Le Launcher est accessible sur l'URL `http://localhost:10000`.
-  * **Authentification :** Les identifiants par défaut pour le Launcher sont **`sage2`** / **`sage2`**.
-  * **Configuration Client :** Chaque Raspberry Pi est configuré pour ouvrir automatiquement une page Web (client SAGE2) au démarrage, et est identifié par son adresse MAC, IP et sa position dans l'architecture.
+Le fonctionnement de SAGE2 repose sur des technologies Web pour le serveur et des navigateurs pour les clients.
+
+### 1. Pré-requis et Serveur
+
+* **Pré-requis logiciel :** Installation de **Node.js** pour lancer les scripts SAGE2.
+* **Exécution de SAGE2 :** Contrôlée par le processus de **"Launcher"** (fichier `Launcher.bat`).
+* **Accès au Launcher :** Accessible à l'URL `http://localhost:10000`.
+
+### 2. Accès et Gestion
+
+* **Authentification par défaut :** Le Launcher est protégé par un mot de passe.
+    * **Nom d'utilisateur :** `sage2`
+    * **Mot de passe :** `sage2`
+* **Interface de base :** Les fonctions principales (Start, Stop, Set a meeting access) sont accessibles sur `http://localhost:10000/#SAGE2`.
+* **Gestion des ressources :** Un gestionnaire de fichiers est disponible pour gérer et organiser les médias (vidéos, images, documents).
+
+### 3. Configuration des Clients (RPi)
+
+* Chaque Raspberry Pi est configuré pour ouvrir une **page Web** (client SAGE2) à chaque démarrage, avec son ID apparaissant dans le lien de la page.
+* L'interface d'administration permet de gérer la résolution de chaque écran, les numéros de ports d'accès, et la disposition de chacun sur le quadrillage.
+
+---
+
+## 📜 Conclusion
+
+Ce projet a permis à l'équipe d'approfondir ses connaissances en nouvelles technologies de communication, de maîtriser la technologie **SAGE2**, et de développer des compétences humaines essentielles telles que le travail collaboratif, le respect des jalons et la gestion des difficultés.
